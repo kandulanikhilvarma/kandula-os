@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Kandula OS — offline preview</title>
+  <link rel="icon" href="../static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../static/css/tokens.css">
+  <link rel="stylesheet" href="../static/css/dashboard.css">
+  <script src="../static/js/theme.js"></script>
+  <style>
+    .preview-note {
+      background: var(--amber-wash); border: 1px solid var(--amber);
+      color: var(--ink); border-radius: var(--r-md);
+      padding: var(--s3) var(--s4); margin-bottom: var(--s4);
+      font-size: var(--t-sm);
+    }
+    .preview-note code { font-family: var(--font-mono); font-size: var(--t-xs); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 15 V49"/>
+          <path d="M22 33 L43 15"/>
+          <path d="M22 33 C34 36 43 41 43 47 C43 51 38 51 37 47"/>
+        </g>
+      </svg>
+      <h1>Kandula<span>OS</span></h1>
+    </div>
+    <div class="topbar-actions">
+      <span id="last-sync" class="last-sync"></span>
+      <button id="palette-btn" type="button" class="btn ghost" aria-haspopup="dialog" title="Command palette">
+        <span class="kbd">Ctrl</span><span class="kbd">K</span>
+      </button>
+      <button id="theme-btn" type="button" class="btn icon" aria-label="Switch theme" title="Switch theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="i-sun">
+          <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/>
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 2.5v2.5M12 19v2.5M2.5 12h2.5M19 12h2.5M5.2 5.2l1.8 1.8M17 17l1.8 1.8M18.8 5.2 17 7M7 17l-1.8 1.8"/>
+          </g>
+        </svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="i-moon">
+          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button id="auth-btn" type="button" class="btn primary" disabled>Preview</button>
+    </div>
+  </header>
+
+  <p class="preview-note">
+    <strong>Offline preview.</strong> Sample data, no sign-in, no server. The real
+    dashboard renders exactly this markup from <code>GET /api/state</code>.
+    Theme toggle, filters, search and <code>Ctrl</code>+<code>K</code> all work here.
+  </p>
+
+  <p id="message" class="msg" role="status" hidden></p>
+
+  <main id="main" hidden>
+    <section class="tiles" aria-label="Summary">
+      <article class="tile"><span class="tile-label">Open</span><strong id="m-open" class="tile-value">—</strong><span id="m-open-sub" class="tile-sub"></span></article>
+      <article class="tile"><span class="tile-label">Overdue</span><strong id="m-overdue" class="tile-value">—</strong><span id="m-overdue-sub" class="tile-sub"></span></article>
+      <article class="tile"><span class="tile-label">Due today</span><strong id="m-today" class="tile-value">—</strong><span id="m-today-sub" class="tile-sub"></span></article>
+      <article class="tile"><span class="tile-label">Complete</span><strong id="m-rate" class="tile-value">—</strong><span id="m-rate-sub" class="tile-sub"></span></article>
+    </section>
+
+    <div class="split">
+      <section class="card" aria-labelledby="focus-h">
+        <h2 id="focus-h">Focus now</h2>
+        <ol id="focus" class="focus-list"></ol>
+      </section>
+      <section class="card" aria-labelledby="charts-h">
+        <h2 id="charts-h">Shape of the week</h2>
+        <div id="chart-priority" class="chart"></div>
+        <div id="chart-trend" class="chart"></div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="tasks-h">
+      <div class="card-head">
+        <h2 id="tasks-h">Tasks</h2>
+        <div class="filters">
+          <label class="visually-hidden" for="search">Search tasks</label>
+          <input id="search" type="search" class="input" placeholder="Filter tasks…" autocomplete="off">
+          <div class="chips" role="group" aria-label="Filter by priority">
+            <button type="button" class="chip is-on" data-prio="all">All</button>
+            <button type="button" class="chip" data-prio="P1">P1</button>
+            <button type="button" class="chip" data-prio="P2">P2</button>
+            <button type="button" class="chip" data-prio="P3">P3</button>
+          </div>
+          <label class="toggle"><input id="show-done" type="checkbox"> <span>Done</span></label>
+        </div>
+      </div>
+      <ul id="tasks" class="task-list"></ul>
+      <p id="tasks-empty" class="empty" hidden></p>
+    </section>
+
+    <section class="card" aria-labelledby="projects-h">
+      <h2 id="projects-h">Projects</h2>
+      <ul id="projects" class="project-list"></ul>
+    </section>
+  </main>
+
+  <dialog id="palette" class="palette" aria-label="Command palette">
+    <label class="visually-hidden" for="palette-input">Command or search</label>
+    <input id="palette-input" type="text" class="palette-input" placeholder="Jump to a task, project, or command…" autocomplete="off">
+    <ul id="palette-results" class="palette-results" role="listbox"></ul>
+    <footer class="palette-foot">
+      <span><span class="kbd">↑</span><span class="kbd">↓</span> navigate</span>
+      <span><span class="kbd">Enter</span> select</span>
+      <span><span class="kbd">Esc</span> close</span>
+    </footer>
+  </dialog>
+
+  <footer class="pagefoot">
+    <span>Kandula OS — offline preview</span>
+    <span>Files are the source of truth. This page is a mirror.</span>
+  </footer>
+
+  <!-- no firebase config on <body>, so dashboard.js skips auth and only exposes render -->
+  <script src="../static/js/dashboard.js"></script>
+  <script src="preview-data.js"></script>
+</body>
+</html>

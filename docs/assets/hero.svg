@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="Kandula OS — your memory in plain text, your day at a glance">
+  <title>Kandula OS</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12161e"/>
+      <stop offset="0.55" stop-color="#0d1017"/>
+      <stop offset="1" stop-color="#0a0d13"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d97757" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#d97757" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#1b212b" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="340" rx="20" fill="url(#bg)"/>
+  <rect width="1200" height="340" rx="20" fill="url(#grid)" opacity="0.55"/>
+  <circle cx="150" cy="120" r="260" fill="url(#glow)"/>
+  <rect x="0.75" y="0.75" width="1198.5" height="338.5" rx="20" fill="none" stroke="#242b36" stroke-width="1.5"/>
+
+  <!-- mark -->
+  <g transform="translate(72 104) scale(2.05)">
+    <g fill="none" stroke="#d97757" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 4 V38"/>
+      <path d="M8 22 L29 4"/>
+      <path d="M8 22 C20 25 29 30 29 36 C29 40 24 40 23 36"/>
+    </g>
+  </g>
+
+  <!-- wordmark -->
+  <text x="176" y="152" font-family="Segoe UI, system-ui, -apple-system, sans-serif" font-size="66" font-weight="700" letter-spacing="-1.5" fill="#e9edf3">Kandula<tspan fill="#d97757"> OS</tspan></text>
+  <text x="180" y="192" font-family="ui-monospace, Cascadia Code, Consolas, monospace" font-size="18" letter-spacing="0.5" fill="#8a94a3">Your memory in plain text. Your day at a glance.</text>
+
+  <!-- pipeline motif -->
+  <g font-family="ui-monospace, Cascadia Code, Consolas, monospace" font-size="12.5" fill="#8a94a3">
+    <g fill="none" stroke="#2b3340" stroke-width="1.5">
+      <rect x="180" y="232" width="152" height="48" rx="10"/>
+      <rect x="380" y="232" width="152" height="48" rx="10"/>
+      <rect x="580" y="232" width="152" height="48" rx="10"/>
+      <rect x="780" y="232" width="152" height="48" rx="10"/>
+    </g>
+    <text x="256" y="261" text-anchor="middle">TASKS.md</text>
+    <text x="456" y="261" text-anchor="middle">sync</text>
+    <text x="656" y="261" text-anchor="middle">Firestore</text>
+    <text x="856" y="261" text-anchor="middle" fill="#d97757">dashboard</text>
+    <g stroke="#3a4453" stroke-width="1.5" fill="none" stroke-linecap="round">
+      <path d="M338 256 H374"/><path d="M368 251 L374 256 L368 261"/>
+      <path d="M538 256 H574"/><path d="M568 251 L574 256 L568 261"/>
+      <path d="M738 256 H774"/><path d="M768 251 L774 256 L768 261"/>
+    </g>
+  </g>
+
+  <!-- badges strip -->
+  <g font-family="ui-monospace, Cascadia Code, Consolas, monospace" font-size="12.5" fill="#61697a" text-anchor="end">
+    <text x="1128" y="252">Flask · Firestore · Vercel</text>
+    <text x="1128" y="274">zero frameworks · zero build step</text>
+  </g>
+</svg>

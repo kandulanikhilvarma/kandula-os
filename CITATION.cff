@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: "Kandula OS"
+message: "If you reference this project, please cite it as below."
+type: software
+authors:
+  - family-names: "Kandula"
+    given-names: "Nikhilvarma"
+    email: "kandulanikhilvarma@gmail.com"
+    orcid: ~
+repository-code: "https://github.com/kandulanikhilvarma/kandula-os"
+url: "https://github.com/kandulanikhilvarma/kandula-os"
+abstract: >-
+  A single-user personal operating system: plain-markdown memory and task files
+  as the source of truth, scheduled routines that read them, and a read-only
+  Flask and Firestore dashboard deployed on Vercel.
+keywords:
+  - personal-knowledge-management
+  - task-management
+  - flask
+  - firestore
+  - markdown
+license: MIT
+version: "1.0.0"
+date-released: "2026-08-28"
