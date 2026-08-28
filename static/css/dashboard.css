@@ -214,13 +214,14 @@ body {
   counter-increment: focus;
   display: flex; align-items: baseline; gap: var(--s3);
   background: var(--surface-2); border: 1px solid var(--line);
-  border-left: 3px solid var(--clay); border-radius: var(--r-md);
+  border-radius: var(--r-md);
   padding: var(--s3);
 }
+/* The rank number carries the accent; the row itself stays quiet. */
 .focus-list li::before {
   content: counter(focus);
-  font-family: var(--font-mono); font-size: var(--t-xs);
-  color: var(--faint); flex-shrink: 0;
+  font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 600;
+  color: var(--clay); flex-shrink: 0;
 }
 
 /* ---------- projects ---------- */
@@ -252,7 +253,7 @@ body {
   align-items: center; gap: var(--s2); margin-bottom: var(--s2);
 }
 .bar-track { background: var(--surface-2); border-radius: 999px; height: 8px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 999px; transition: width var(--base) var(--ease); }
+.bar-fill { height: 100%; border-radius: 999px; }
 .bar-label { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--muted); }
 .bar-count { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--faint); text-align: right; }
 
