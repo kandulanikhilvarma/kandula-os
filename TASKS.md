@@ -7,11 +7,14 @@ Priorities: P1 must-do-today, P2 this-week, P3 someday. due/project optional. --
 
 ## Open
 
-- [ ] P1 Set up Firebase project + service account for kandula-os | due:2026-07-18 | project:kandula-os
-- [ ] P1 Deploy dashboard to Vercel | due:2026-07-19 | project:kandula-os
-- [ ] P2 Fill in profile.md TODOs | project:kandula-os
-- [ ] P2 Run first sync and verify dashboard | project:kandula-os
+- [ ] P1 Create the Firebase project and service account | due:2026-08-30 | project:kandula-os
+- [ ] P1 Deploy the dashboard to Vercel | due:2026-08-31 | project:kandula-os
+- [ ] P2 Run the first sync and verify the dashboard | due:2026-08-31 | project:kandula-os
+- [ ] P2 Fill in the profile.md TODOs | project:kandula-os
+- [ ] P3 Set up the morning brief scheduled task | project:routines
 
 ## Done
 
-- [x] P1 Confirm build brief | project:kandula-os
+- [x] P1 Confirm the build brief | project:kandula-os
+- [x] P1 Publish kandula-os as a public repo | project:kandula-os
+- [x] P2 Add CI: ruff, tests, task-format gate, mermaid check | project:kandula-os
