@@ -1,49 +1,60 @@
-/* Kandula OS design tokens.
+/* Kandula OS design tokens — the "field ledger" world.
+   A warm paper instrument: ink on ivory by day, ink on deep slate after hours.
+   Serif figures for the numbers you read, mono for the data the machine wrote.
    Light is the base; dark overrides only what changes. `data-theme` on <html>
    wins over the media query in both directions so the toggle always applies. */
 
 :root {
   color-scheme: light dark;
 
-  /* surfaces */
-  --bg: #faf9f7;
-  --surface: #ffffff;
-  --surface-2: #f3f1ee;
-  --line: #e3ded7;
-  --line-strong: #cec7bd;
+  /* surfaces — warm paper */
+  --bg: #f4f0e7;
+  --surface: #fffdf7;
+  --surface-2: #ece5d7;
+  --line: #ddd4c2;
+  --line-strong: #c7bca4;
 
-  /* ink */
-  --ink: #191c22;
-  --muted: #5f6775;
-  --faint: #8b93a1;
+  /* ink — warm, never pure black */
+  --ink: #211c15;
+  --muted: #6a6053;
+  --faint: #988d7a;
 
   /* accents — P1 clay, P2 amber, P3 sage, info blue */
-  --clay: #c25c3a;
-  --amber: #a97a1e;
-  --sage: #3f7a5d;
-  --blue: #3f63ab;
-  --danger: #b4322c;
+  --clay: #bd5732;
+  --amber: #9c7016;
+  --sage: #3d7350;
+  --blue: #3c5c9c;
+  --danger: #ac2e25;
 
-  /* accent washes for chips and chart fills */
-  --clay-wash: rgba(194, 92, 58, 0.10);
-  --amber-wash: rgba(169, 122, 30, 0.10);
-  --sage-wash: rgba(63, 122, 93, 0.10);
-  --blue-wash: rgba(63, 99, 171, 0.10);
+  /* accent washes for chips, chart fills, state cells */
+  --clay-wash: rgba(189, 87, 50, 0.11);
+  --amber-wash: rgba(156, 112, 22, 0.11);
+  --sage-wash: rgba(61, 115, 80, 0.11);
+  --blue-wash: rgba(60, 92, 156, 0.11);
 
-  --ring: rgba(194, 92, 58, 0.45);
-  --shadow: 0 1px 2px rgba(16, 20, 28, .05), 0 8px 24px -12px rgba(16, 20, 28, .16);
-  --shadow-lift: 0 2px 4px rgba(16, 20, 28, .06), 0 24px 48px -20px rgba(16, 20, 28, .28);
+  --ring: rgba(189, 87, 50, 0.42);
 
-  /* type */
+  /* depth — real offset, soft blur; the ledger sits on the desk, it doesn't float */
+  --shadow: 0 1px 1px rgba(52, 40, 24, .05), 0 10px 26px -16px rgba(52, 40, 24, .22);
+  --shadow-lift: 0 2px 4px rgba(52, 40, 24, .07), 0 28px 56px -24px rgba(52, 40, 24, .34);
+
+  /* paper grain — two faint dot fields, no external asset */
+  --grain:
+    radial-gradient(rgba(120, 96, 60, 0.05) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    radial-gradient(rgba(120, 96, 60, 0.035) 1px, transparent 1.4px) 11px 11px / 22px 22px;
+
+  /* type — serif for figures you read, sans for chrome, mono for machine data */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
   --font-ui: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
   --t-xs: 11px;
   --t-sm: 12.5px;
   --t-base: 14px;
   --t-md: 16px;
-  --t-lg: 20px;
-  --t-xl: 28px;
-  --t-2xl: 40px;
+  --t-lg: 21px;
+  --t-xl: 30px;
+  --t-2xl: 42px;
+  --t-3xl: 54px;
 
   /* space — 4pt scale */
   --s1: 4px;
@@ -55,68 +66,78 @@
 
   --r-sm: 6px;
   --r-md: 10px;
-  --r-lg: 16px;
+  --r-lg: 15px;
 
   /* motion */
   --fast: 120ms;
-  --base: 220ms;
+  --base: 240ms;
+  --slow: 600ms;
   --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
 
   --page: 1080px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d1017;
-    --surface: #14181f;
-    --surface-2: #1a1f28;
-    --line: #262c37;
-    --line-strong: #39414f;
+    --bg: #0f1015;
+    --surface: #16181f;
+    --surface-2: #1d2029;
+    --line: #282c36;
+    --line-strong: #3b414e;
 
-    --ink: #e9edf3;
-    --muted: #8a94a3;
-    --faint: #5b6472;
+    --ink: #ece6da;
+    --muted: #9a9384;
+    --faint: #6b6557;
 
-    --clay: #d97757;
-    --amber: #d9a441;
+    --clay: #db7d5c;
+    --amber: #d6a343;
     --sage: #6fa88a;
     --blue: #7d9de0;
     --danger: #e0736b;
 
-    --clay-wash: rgba(217, 119, 87, 0.14);
-    --amber-wash: rgba(217, 164, 65, 0.14);
-    --sage-wash: rgba(111, 168, 138, 0.14);
-    --blue-wash: rgba(125, 157, 224, 0.14);
+    --clay-wash: rgba(219, 125, 92, 0.15);
+    --amber-wash: rgba(214, 163, 67, 0.15);
+    --sage-wash: rgba(111, 168, 138, 0.15);
+    --blue-wash: rgba(125, 157, 224, 0.15);
 
-    --ring: rgba(217, 119, 87, 0.55);
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .6);
-    --shadow-lift: 0 2px 4px rgba(0, 0, 0, .45), 0 24px 48px -20px rgba(0, 0, 0, .7);
+    --ring: rgba(219, 125, 92, 0.55);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 30px -16px rgba(0, 0, 0, .66);
+    --shadow-lift: 0 2px 4px rgba(0, 0, 0, .48), 0 30px 60px -24px rgba(0, 0, 0, .74);
+
+    --grain:
+      radial-gradient(rgba(255, 246, 230, 0.022) 1px, transparent 1.4px) 0 0 / 22px 22px,
+      radial-gradient(rgba(255, 246, 230, 0.015) 1px, transparent 1.4px) 11px 11px / 22px 22px;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0d1017;
-  --surface: #14181f;
-  --surface-2: #1a1f28;
-  --line: #262c37;
-  --line-strong: #39414f;
+  --bg: #0f1015;
+  --surface: #16181f;
+  --surface-2: #1d2029;
+  --line: #282c36;
+  --line-strong: #3b414e;
 
-  --ink: #e9edf3;
-  --muted: #8a94a3;
-  --faint: #5b6472;
+  --ink: #ece6da;
+  --muted: #9a9384;
+  --faint: #6b6557;
 
-  --clay: #d97757;
-  --amber: #d9a441;
+  --clay: #db7d5c;
+  --amber: #d6a343;
   --sage: #6fa88a;
   --blue: #7d9de0;
   --danger: #e0736b;
 
-  --clay-wash: rgba(217, 119, 87, 0.14);
-  --amber-wash: rgba(217, 164, 65, 0.14);
-  --sage-wash: rgba(111, 168, 138, 0.14);
-  --blue-wash: rgba(125, 157, 224, 0.14);
+  --clay-wash: rgba(219, 125, 92, 0.15);
+  --amber-wash: rgba(214, 163, 67, 0.15);
+  --sage-wash: rgba(111, 168, 138, 0.15);
+  --blue-wash: rgba(125, 157, 224, 0.15);
 
-  --ring: rgba(217, 119, 87, 0.55);
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .6);
-  --shadow-lift: 0 2px 4px rgba(0, 0, 0, .45), 0 24px 48px -20px rgba(0, 0, 0, .7);
+  --ring: rgba(219, 125, 92, 0.55);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 30px -16px rgba(0, 0, 0, .66);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, .48), 0 30px 60px -24px rgba(0, 0, 0, .74);
+
+  --grain:
+    radial-gradient(rgba(255, 246, 230, 0.022) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    radial-gradient(rgba(255, 246, 230, 0.015) 1px, transparent 1.4px) 11px 11px / 22px 22px;
 }

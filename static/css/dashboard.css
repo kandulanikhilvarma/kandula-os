@@ -1,4 +1,6 @@
-/* Kandula OS dashboard. Tokens live in tokens.css; this file only composes them. */
+/* Kandula OS dashboard — the field-ledger composition.
+   Tokens live in tokens.css; this file only composes them. Every id and class
+   the renderer touches (static/js/dashboard.js) is preserved. */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,10 +13,19 @@ body {
   font-size: var(--t-base);
   line-height: 1.5;
   min-height: 100vh;
-  padding: var(--s4) var(--s4) var(--s6);
+  padding: var(--s5) var(--s4) var(--s6);
   max-width: var(--page);
   margin: 0 auto;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper grain — fixed so the page reads as one sheet, not scrolling wallpaper. */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1;
+  background-image: var(--grain);
+  pointer-events: none;
 }
 
 .visually-hidden {
@@ -42,18 +53,23 @@ body {
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s5);
+  padding-bottom: var(--s4);
+  border-bottom: 1px solid var(--line);
 }
 
 .brand { display: flex; align-items: center; gap: var(--s3); }
-.mark { width: 34px; height: 34px; color: var(--clay); flex-shrink: 0; }
-.brand h1 { font-size: var(--t-lg); font-weight: 650; letter-spacing: -0.4px; }
-.brand h1 span { color: var(--clay); margin-left: 5px; }
+.mark { width: 36px; height: 36px; color: var(--clay); flex-shrink: 0; }
+.brand h1 {
+  font-family: var(--font-display);
+  font-size: var(--t-lg); font-weight: 600; letter-spacing: -0.2px;
+}
+.brand h1 span { color: var(--clay); margin-left: 4px; font-style: italic; }
 
 .topbar-actions { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
 
 .last-sync {
   font-family: var(--font-mono); font-size: var(--t-xs);
-  color: var(--faint); margin-right: var(--s1);
+  color: var(--faint); margin-right: var(--s1); letter-spacing: 0.1px;
 }
 
 .btn {
@@ -63,12 +79,13 @@ body {
   font: inherit; font-size: var(--t-sm); cursor: pointer;
   display: inline-flex; align-items: center; gap: var(--s2);
   transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease),
-              transform var(--fast) var(--ease);
+              transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
-.btn:hover { border-color: var(--line-strong); }
+.btn:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: var(--clay); border-color: var(--clay); color: #fff; font-weight: 550; }
-.btn.primary:hover { filter: brightness(1.07); }
+.btn.primary:hover { filter: brightness(1.06); }
+.btn.primary:disabled { opacity: .55; cursor: default; filter: none; box-shadow: none; }
 .btn.ghost { background: transparent; }
 .btn.icon { padding: 0; width: 38px; justify-content: center; }
 .btn.icon svg { width: 17px; height: 17px; }
@@ -94,27 +111,48 @@ body {
 .msg.error { color: var(--danger); }
 .empty { color: var(--faint); font-size: var(--t-sm); padding: var(--s4) 0; text-align: center; }
 
-/* ---------- metric tiles ---------- */
+/* ---------- metric ledger band ---------- */
+/* One panel, four columns split by hairline rules — not four floating cards.
+   renderTiles() rewrites the overdue cell's class to `tile alert`/`tile good`,
+   so state colour lives on `.tile`, never on an extra wrapper class. */
 
 .tiles {
-  display: grid; gap: var(--s3); margin-bottom: var(--s4);
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: grid; margin-bottom: var(--s4);
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .tile {
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--r-lg); padding: var(--s4);
-  display: flex; flex-direction: column; gap: var(--s1);
-  box-shadow: var(--shadow);
+  padding: var(--s4) var(--s4) calc(var(--s4) - 2px);
+  display: flex; flex-direction: column; gap: var(--s2);
+  border-left: 1px solid var(--line);
+  position: relative;
 }
+.tile:first-child { border-left: none; }
+
 .tile-label {
-  font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.9px;
-  color: var(--muted); font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--muted); font-weight: 500;
 }
-.tile-value { font-size: var(--t-2xl); font-weight: 660; letter-spacing: -1.5px; line-height: 1.05; }
+.tile-value {
+  font-family: var(--font-display);
+  font-size: var(--t-3xl); font-weight: 600; line-height: .95;
+  letter-spacing: -1px; font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
 .tile-sub { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--faint); }
 .tile.alert .tile-value { color: var(--danger); }
 .tile.good .tile-value { color: var(--sage); }
+/* the accent hairline under a live state, drawn only when the cell is flagged */
+.tile.alert::after, .tile.good::after {
+  content: ""; position: absolute; left: var(--s4); right: var(--s4); bottom: 0;
+  height: 2px; border-radius: 2px;
+}
+.tile.alert::after { background: var(--danger); }
+.tile.good::after { background: var(--sage); }
 
 /* ---------- cards ---------- */
 
@@ -131,15 +169,25 @@ body {
 .split .card { margin-bottom: 0; }
 
 .card h2 {
-  font-size: var(--t-xs); font-weight: 650; letter-spacing: 1.1px;
-  text-transform: uppercase; color: var(--muted); margin-bottom: var(--s3);
+  font-family: var(--font-mono);
+  font-size: var(--t-xs); font-weight: 550; letter-spacing: 1.4px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: var(--s4);
+  padding-bottom: var(--s3); border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: var(--s2);
+}
+/* a small clay tick before each section title — a drawn mark, one weight */
+.card h2::before {
+  content: ""; width: 7px; height: 7px; flex-shrink: 0;
+  background: var(--clay); border-radius: 2px; transform: rotate(45deg);
 }
 
 .card-head {
   display: flex; align-items: flex-start; justify-content: space-between;
-  gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s3);
+  gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4);
+  padding-bottom: var(--s3); border-bottom: 1px solid var(--line);
 }
-.card-head h2 { margin-bottom: 0; padding-top: var(--s2); }
+.card-head h2 { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 
 /* ---------- filters ---------- */
 
@@ -150,6 +198,7 @@ body {
   border: 1px solid var(--line); border-radius: var(--r-md);
   padding: var(--s2) var(--s3); min-height: 36px; min-width: 180px;
   font: inherit; font-size: var(--t-sm);
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 .input::placeholder { color: var(--faint); }
 .input:focus { border-color: var(--clay); outline: none; box-shadow: 0 0 0 3px var(--ring); }
@@ -172,7 +221,7 @@ body {
 }
 .toggle input { accent-color: var(--clay); width: 15px; height: 15px; cursor: pointer; }
 
-/* ---------- task list ---------- */
+/* ---------- task + project rows ---------- */
 
 .task-list, .project-list, .focus-list { list-style: none; }
 
@@ -182,6 +231,8 @@ body {
   min-height: 44px;
 }
 .task-list li:last-child, .project-list li:last-child { border-bottom: none; }
+.task-list li { transition: transform var(--fast) var(--ease); }
+.task-list li:hover { transform: translateX(4px); }
 
 .prio {
   font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 600;
@@ -217,11 +268,12 @@ body {
   border-radius: var(--r-md);
   padding: var(--s3);
 }
-/* The rank number carries the accent; the row itself stays quiet. */
+/* The rank number carries the accent in the serif hand; the row stays quiet. */
 .focus-list li::before {
   content: counter(focus);
-  font-family: var(--font-mono); font-size: var(--t-xs); font-weight: 600;
-  color: var(--clay); flex-shrink: 0;
+  font-family: var(--font-display); font-size: var(--t-md); font-weight: 600;
+  color: var(--clay); flex-shrink: 0; line-height: 1.1; width: 16px;
+  font-variant-numeric: lining-nums;
 }
 
 /* ---------- projects ---------- */
@@ -241,21 +293,30 @@ body {
 
 /* ---------- charts ---------- */
 
-.chart { margin-top: var(--s4); }
+.chart { margin-top: var(--s5); }
 .chart:first-of-type { margin-top: 0; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 .chart-title {
   font-family: var(--font-mono); font-size: var(--t-xs);
-  color: var(--faint); margin-bottom: var(--s3);
+  color: var(--faint); margin-bottom: var(--s3); letter-spacing: 0.2px;
 }
 .bar-row {
   display: grid; grid-template-columns: 26px 1fr 30px;
   align-items: center; gap: var(--s2); margin-bottom: var(--s2);
 }
-.bar-track { background: var(--surface-2); border-radius: 999px; height: 8px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 999px; }
 .bar-label { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--muted); }
-.bar-count { font-family: var(--font-mono); font-size: var(--t-xs); color: var(--faint); text-align: right; }
+.bar-track { background: var(--surface-2); border-radius: 999px; height: 9px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 999px;
+  transform-origin: left center;
+  animation: grow var(--slow) var(--ease-out) both;
+}
+.bar-count {
+  font-family: var(--font-mono); font-size: var(--t-xs); color: var(--faint);
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ---------- command palette ---------- */
 
@@ -265,7 +326,7 @@ body {
   border-radius: var(--r-lg); background: var(--surface); color: var(--ink);
   box-shadow: var(--shadow-lift); margin: 12vh auto auto;
 }
-.palette::backdrop { background: rgba(8, 10, 14, .55); }
+.palette::backdrop { background: rgba(20, 14, 6, .5); backdrop-filter: blur(2px); }
 
 .palette-input {
   width: 100%; background: transparent; color: var(--ink);
@@ -304,7 +365,7 @@ body {
   100% { background-position: -100% 0; }
 }
 
-/* ---------- footer + motion ---------- */
+/* ---------- footer ---------- */
 
 .pagefoot {
   display: flex; justify-content: space-between; gap: var(--s3); flex-wrap: wrap;
@@ -312,20 +373,32 @@ body {
   font-size: var(--t-xs); color: var(--faint); font-family: var(--font-mono);
 }
 
+/* ---------- the one authored moment ---------- */
+/* The sheet settles onto the desk: a soft blur-and-rise, once, on first render. */
+
 #main {
-  opacity: 0; transform: translateY(4px);
-  transition: opacity var(--base) var(--ease), transform var(--base) var(--ease);
+  opacity: 0; transform: translateY(10px); filter: blur(6px);
+  transition: opacity var(--base) var(--ease-out),
+              transform var(--base) var(--ease-out),
+              filter var(--base) var(--ease-out);
 }
-#main.loaded { opacity: 1; transform: none; }
+#main.loaded { opacity: 1; transform: none; filter: none; }
+
+@media (max-width: 620px) {
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .tile:nth-child(3) { border-left: none; }
+  .tile:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+}
 
 @media (max-width: 560px) {
-  body { padding: var(--s3) var(--s3) var(--s5); }
-  .tile-value { font-size: var(--t-xl); }
+  body { padding: var(--s4) var(--s3) var(--s5); }
+  .tile-value { font-size: var(--t-2xl); }
   .filters { width: 100%; }
   .input { flex: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #main { filter: none; }
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
