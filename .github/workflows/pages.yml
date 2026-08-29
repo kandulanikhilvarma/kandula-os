@@ -1,0 +1,55 @@
+name: Pages
+
+# Publishes the offline dashboard preview to GitHub Pages. No Firebase, no
+# secrets — the same CSS and rendering code as the real app, driven by the
+# sample state in docs/preview-data.js. Live at:
+#   https://kandulanikhilvarma.github.io/kandula-os/
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - static/**
+      - docs/preview.html
+      - docs/preview-data.js
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r static _site/static
+          cp docs/preview-data.js _site/preview-data.js
+          # preview.html lives in docs/ and reaches assets via ../static; at the
+          # site root that prefix becomes static/. One rewrite, then it is index.
+          sed 's|\.\./static|static|g' docs/preview.html > _site/index.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
