@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://kandulanikhilvarma.github.io/kandula-os/"><img alt="Live dashboard" src="https://img.shields.io/badge/live-dashboard-c25c3a.svg"></a>
+  <a href="https://kandula.studio/kandula-os/"><img alt="Live dashboard" src="https://img.shields.io/badge/live-dashboard-c25c3a.svg"></a>
   <a href="https://github.com/kandulanikhilvarma/kandula-os/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/kandulanikhilvarma/kandula-os/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   <img alt="Python 3.12+" src="https://img.shields.io/badge/python-3.12%2B-3776ab.svg">
@@ -23,7 +23,7 @@ have your OS.
 > name, which made the choice easy.
 
 <p align="center">
-  <a href="https://kandulanikhilvarma.github.io/kandula-os/"><b>▶ Open the live dashboard</b></a>
+  <a href="https://kandula.studio/kandula-os/"><b>▶ Open the live dashboard</b></a>
   &nbsp;·&nbsp; real CSS, real rendering code, sample data — no sign-in, no server
 </p>
 
@@ -95,7 +95,7 @@ Full diagrams — sync sequence, auth flow, data model, trust boundaries — are
 
 ### See it without deploying anything
 
-**Hosted:** [kandulanikhilvarma.github.io/kandula-os](https://kandulanikhilvarma.github.io/kandula-os/)
+**Hosted:** [kandula.studio/kandula-os](https://kandula.studio/kandula-os/)
 — published from `docs/preview.html` by the [Pages workflow](.github/workflows/pages.yml)
 on every push. No Firebase, no secrets.
 
