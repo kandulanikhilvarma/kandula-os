@@ -49,23 +49,11 @@ One page. Server-computed metrics, filterable task list, a command palette on
 <kbd>Ctrl</kbd>+<kbd>K</kbd>, light and dark themes, and the last synced state
 cached locally so a reload paints before the network answers.
 
-```
-+---------------------------------------------------------------+
-|  Kandula OS      synced 2 min ago   Ctrl+K   theme   out      |
-+---------------+---------------+---------------+---------------+
-| OPEN          | OVERDUE       | DUE TODAY     | COMPLETE      |
-| 12            | 2             | 3             | 64%           |
-| 33 tracked    | needs attn.   | 7 this week   | 21 done       |
-+-------------------------------+-------------------------------+
-| FOCUS NOW                     | SHAPE OF THE WEEK             |
-| 1  P1  ship deploy  2d late   | P1  #############   6         |
-| 2  P1  firebase setup  today  | P2  ########......   4        |
-| 3  P2  fill profile.md        | P3  ####..........   2        |
-|                               |                               |
-|                               | open over time      .-'-.     |
-|                               |            .-'-.--'     '--.  |
-+-------------------------------+-------------------------------+
-```
+<p align="center">
+  <a href="https://kandula.studio/kandula-os/"><img src="docs/assets/dashboard-light.png" alt="Kandula OS dashboard: a metric ledger, a ranked focus list, the shape of the week, and the full task list" width="100%"></a>
+</p>
+
+<p align="center"><sub>The live preview, rendered from sample data · <a href="https://kandula.studio/kandula-os/">open it →</a></sub></p>
 
 ## How it fits together
 
